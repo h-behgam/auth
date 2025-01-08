@@ -5,7 +5,7 @@ interface InputProps {
   autoComplete?: string;
   placeholder?: string;
   changeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  classname: string;
+  className?: string;
   labalName?: string;
   labelClassName?: string;
   labelTitle?: string;
@@ -18,7 +18,7 @@ export default function CustomInput({
   name,
   defaultValue,
   changeHandler,
-  classname,
+  className,
   autoComplete,
   labalName,
   labelClassName,
@@ -27,6 +27,7 @@ export default function CustomInput({
   multiple,
   value,
 }: InputProps) {
+  const defaultclassName = 'block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
   return (
     <>
       {labalName && (
@@ -42,7 +43,7 @@ export default function CustomInput({
         placeholder={placeholder}
         onChange={changeHandler}
         autoComplete={autoComplete}
-        className={classname}
+        className={className ? className : defaultclassName}
         {...(defaultValue ? { defaultValue: defaultValue } : {})}
         {...(value ? { value: value } : {})}
       />
