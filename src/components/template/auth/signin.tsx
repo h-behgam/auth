@@ -1,15 +1,27 @@
 import ClientButton from '@/components/global/client-button';
 import CustomInput from '@/components/global/custom-input';
+import { signIn } from '@/lib/next-auth';
 import Link from 'next/link';
 
 function SigninTemplate() {
+  const handlerSubmit = (formData: FormData) => {
+    signIn('credentials', {formData, callbackUrl: '/dashboard'});
+  }
   return (
     <div className='mx-auto w-full max-w-md'>
       <div className='mb-6 text-center'>
         <h2 className='text-3xl font-bold'>Login</h2>
         <p>Enter your email below to login to your account</p>
       </div>
-      <form className=''>
+      <form className='' action={async (formData) => {
+        "use server"
+        const { username, password } = Object.fromEntries(formData)
+        console.log(username, password );
+        
+        const a = await signIn("credentials", {username, password, callbackUrl: "/dashboard"})
+        console.log('aaaaaaaaaaaa',a);
+        
+      }}>
         <div className='mb-2 p-1'>
           <CustomInput
             name='username'
