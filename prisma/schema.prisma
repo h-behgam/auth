@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            Int    @id @default(autoincrement())
   name          String
   username      String    @unique
   password      String
@@ -29,8 +29,8 @@ model User {
 }
 
 model Account {
-  id                       String  @id @default(cuid())
-  userId                   String  @unique
+  id                       Int    @id @default(autoincrement())
+  userId                   Int  @unique
   type                     String
   provider                 String
   providerAccountId        String
@@ -52,9 +52,9 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           Int    @id @default(autoincrement())
   sessionToken String   @unique
-  userId       String
+  userId       Int
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id])
 
