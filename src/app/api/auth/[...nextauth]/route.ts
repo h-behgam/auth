@@ -1,5 +1,5 @@
 
-import { handlers } from '@/lib/next-auth';
+import { handlers } from '@/lib/auth/next-auth';
 export const { GET, POST } = handlers
 
 // import { authOption } from '@/lib/next-auth';
