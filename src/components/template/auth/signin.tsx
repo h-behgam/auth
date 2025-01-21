@@ -1,21 +1,11 @@
 'use client'
 import ClientButton from '@/components/global/client-button';
 import CustomInput from '@/components/global/custom-input';
-import { signIn } from '@/lib/next-auth';
 import Link from 'next/link';
 import { login } from '../../../../actions/auth';
 import { useActionState } from 'react';
 // import { signIn } from 'next-auth/react';
-export type FormState =
-  | {
-      errors?: {
-        name?: string[];
-        email?: string[];
-        password?: string[];
-      };
-      message?: string;
-    }
-  | undefined;
+
 
 function SigninTemplate() {
   // const handlerSubmit = (
@@ -24,10 +14,9 @@ function SigninTemplate() {
   // ) => {
   //   signIn('credentials', { formData, callbackUrl: '/dashboard' });
   // };
-  const [state, action, pending] = useActionState(login, {
-    message: "",
-    error: null,
-  });
+  const [state, action, pending] = useActionState( login, { message: '', error: null }
+
+  );
   console.log('state', state);
   
   return (
