@@ -1,8 +1,8 @@
 'use client';
+import { login } from '@/actions/auth';
 import ClientButton from '@/components/global/client-button';
 import CustomInput from '@/components/global/custom-input';
 import Link from 'next/link';
-import { login } from '../../../../actions/auth';
 import { useActionState } from 'react';
 
 function SigninTemplate() {
