@@ -4,21 +4,13 @@ import CustomInput from '@/components/global/custom-input';
 import Link from 'next/link';
 import { login } from '../../../../actions/auth';
 import { useActionState } from 'react';
-// import { signIn } from 'next-auth/react';
-type initialFormState = {
-  error?: any | undefined;
-  message?: any | undefined;
-};
-const initialState: initialFormState = { message: '', error: null };
+
 function SigninTemplate() {
-  // const handlerSubmit = (
-  //   state: FormState,
-  //   formData: FormData,
-  // ) => {
-  //   signIn('credentials', { formData, callbackUrl: '/dashboard' });
-  // };
+  const initialState = { message: '', error: null };
+
   const [state, action, pending] = useActionState(login, initialState);
-  console.log('state', state);
+
+  console.log('state', state.error?.message);
   console.log('pending', pending);
 
   return (
@@ -33,11 +25,17 @@ function SigninTemplate() {
             name='username'
             type='text'
             placeholder='Username'
-            labalName='username'
-            labelTitle='user'
+            labalName='Username'
+            labelTitle='Username'
           />
-          {Object.values(state.error?.message.username).map((item:any) => <p className='text-red-700 mt-1'>{item}</p> ) }
-          </div>
+          {typeof state.error?.message === 'object' &&
+            state.error?.message?.username &&
+            Object.values(state.error.message.username).map((item) => (
+              <p className='mt-1 text-red-700' key={item}>
+                {item}
+              </p>
+            ))}
+        </div>
         <div className='mb-2 p-1'>
           <CustomInput
             name='password'
@@ -46,8 +44,17 @@ function SigninTemplate() {
             labalName='password'
             labelTitle='Password'
           />
-          {Object.values(state.error?.message.password).map((item:any) => <p className='text-red-700 mt-1'>{item}</p> ) }
+          {typeof state.error?.message === 'string' && state.error?.message && (
+            <p className='mt-1 text-red-700'>{state.error?.message}</p>
+          )}
         </div>
+        {typeof state.error?.message === 'object' &&
+          state.error?.message?.password &&
+          Object.values(state.error.message.password).map((item) => (
+            <p className='mt-1 text-red-700' key={item}>
+              {item}
+            </p>
+          ))}
         <div className='mb-2 text-right'>
           <Link
             href={'/forgot-password'}
@@ -57,11 +64,11 @@ function SigninTemplate() {
           </Link>
         </div>
         <div>
-          <ClientButton disabled={false}>Sign in</ClientButton>
+          <ClientButton disabled={pending}>Sign in</ClientButton>
         </div>
       </form>
       <p className='mt-4 text-center'>
-        Don't have an account? <Link href={'/signup'}>Sign up</Link>
+        Don &apos; t have an account? <Link href={'/signup'}>Sign up</Link>
       </p>
     </div>
   );
