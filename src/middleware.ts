@@ -1,13 +1,7 @@
 import authConfig from '@/lib/auth/auth.config';
 import NextAuth from 'next-auth';
-import { NextRequest } from 'next/server';
 
-interface AuthenticatedRequest extends NextRequest {
-  auth?: {
-    user?: any; // تایپ کاربر (بسته به تنظیمات شما)
-    token?: any; // تایپ توکن (بسته به تنظیمات شما)
-  } | null; // امکان null بودن را اضافه می‌کنیم
-}
+
 // Use only one of the two middleware options below
 // 1. Use middleware directly
 export const { auth: middleware } = NextAuth(authConfig)
