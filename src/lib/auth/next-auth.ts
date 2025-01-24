@@ -1,6 +1,5 @@
-import NextAuth from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 import authConfig from './auth.config';
-import { PrismaAdapter } from '@auth/prisma-adapter';
 import Credentials from 'next-auth/providers/credentials';
 
 import PrismaDB from '../PrismaDB';
@@ -16,9 +15,10 @@ import {
   PasswordInccorectError,
   UserDoesNotExistError,
 } from './custom-auth-error';
+import { PrismaAdapter } from '@auth/prisma-adapter';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  ...authConfig,
+  secret: process.env.AUTH_SECRET,
   adapter: PrismaAdapter(PrismaDB),
   debug: false,
   session: { strategy: 'jwt' },
@@ -26,6 +26,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: '/login',
   },
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {
@@ -38,7 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           type: 'string',
         },
       },
-      authorize: async (credentials): Promise<any> => {
+      authorize: async (credentials): Promise<User | null> => {
         try {
           const { username, password } =
             await formSchema.parseAsync(credentials);
@@ -53,7 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (!isPasswordValid) throw new PasswordInccorectError();
           return user;
-        } catch (error: any) {
+        } catch (error) {
           if (
             error instanceof UserDoesNotExistError ||
             error instanceof PasswordInccorectError
@@ -70,6 +71,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      console.log(222222);
+
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false; // Redirect unauthenticated users to login page
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL('/dashboard', nextUrl));
+      }
+      return true;
+    },
+    async jwt({ account, token, user, profile, session, trigger }) {
+      console.log('account', account);
+      console.log('token', token);
+      console.log('user', user);
+      console.log('profile', profile);
+      console.log('session', session);
+      console.log('trigger', trigger);
+
+      return token;
+    },
+    async session({ session, token }) {
+      console.log('session', session);
+      console.log('token', token);
+      return session;
+    },
+  },
 });
 
 // import { PrismaAdapter } from '@next-auth/prisma-adapter';
