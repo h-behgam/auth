@@ -17,6 +17,7 @@ function SignupTemplate() {
             placeholder='Username'
             labalName='username'
             labelTitle='username'
+            autoComplete='autoComplete'
           />
         </div>
         <div className='mb-2 p-1'>
@@ -30,10 +31,10 @@ function SignupTemplate() {
         </div>
         <div className='mb-2 p-1'>
           <CustomInput
-            name='password'
+            name='repassword'
             type='text'
             placeholder='Retype Password'
-            labalName='password'
+            labalName='repassword'
             labelTitle='Retype Password'
           />
         </div>
