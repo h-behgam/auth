@@ -6,6 +6,7 @@ import NextAuth from 'next-auth';
 // 1. Use middleware directly
 export const { auth: middleware } = NextAuth(authConfig)
 
+
 /**
  * // 2. Wrapped middleware option
  * // import { auth } from "./lib/auth/next-auth";
@@ -19,9 +20,9 @@ export const { auth: middleware } = NextAuth(authConfig)
 
 // Middleware configuration
 export const config = {
-  matcher: ['/dashboard'],
-  // matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/","/(api|trpc)(.*)"],
+  // matcher: ['/dashboard', '/signup'],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/","/(api|trpc)(.*)"],
   // matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)", "/dashboard"],
-  // matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  // matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.svg|.png|.ico).*)"],
   // matcher: ["/((?!api|_next/static|_next/image|.png).*)"],
 };
