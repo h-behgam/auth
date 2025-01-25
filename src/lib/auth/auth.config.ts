@@ -19,18 +19,12 @@ export default {
       const isAuthRoute = authRoute.some((route) =>
         nextUrl.pathname.startsWith(route),
       );
-      console.log('isProtected', isProtected);
-      console.log('isLoggedIn', isLoggedIn);
-      console.log('isAuthRoute', isAuthRoute);
 
       if (isProtected) {
-        // if (!isLoggedIn) return Response.redirect(new URL('/login', nextUrl));
-        redirectAuth('/login', nextUrl.origin);
+        if (!isLoggedIn) return redirectAuth('/login', nextUrl.origin);
       }
       if (isAuthRoute) {
-        if (isLoggedIn)
-          // return NextResponse.redirect(new URL('/dashboard', nextUrl));
-          redirectAuth('/dashboard', nextUrl.origin);
+        if (isLoggedIn) return redirectAuth('/dashboard', nextUrl.origin);
       }
       return true;
     },
