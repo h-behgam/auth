@@ -1,6 +1,6 @@
 'use server';
 
-import { isValidJsonString } from '@/lib/auth/custom-auth-error';
+import { isValidJsonString } from '@/lib/auth/auth-helper';
 import { signIn } from '@/lib/auth/next-auth';
 
 export type FormState = {
