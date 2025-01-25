@@ -10,8 +10,8 @@ function SigninTemplate() {
 
   const [state, action, pending] = useActionState(login, initialState);
 
-  console.log('state', state.error?.message);
-  console.log('pending', pending);
+  // console.log('state', state.error?.message);
+  // console.log('pending', pending);
 
   return (
     <div className='mx-auto w-full max-w-md'>
@@ -25,8 +25,9 @@ function SigninTemplate() {
             name='username'
             type='text'
             placeholder='Username'
-            labalName='Username'
+            labalName='username'
             labelTitle='Username'
+            autoComplete='autoComplete'
           />
           {typeof state.error?.message === 'object' &&
             state.error?.message?.username &&
