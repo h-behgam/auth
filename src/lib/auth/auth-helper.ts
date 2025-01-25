@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 // rediret to specific url
-export const redirectAuth = (redirectTo: string, baseUrl: URL) => {
+export const redirectAuth = (redirectTo: string, baseUrl: string) => {
   return NextResponse.redirect(new URL(redirectTo, baseUrl));
 };
 
