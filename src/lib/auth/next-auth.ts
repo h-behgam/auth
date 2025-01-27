@@ -16,12 +16,27 @@ import {
   UserDoesNotExistError,
 } from './custom-auth-error';
 import { PrismaAdapter } from '@auth/prisma-adapter';
+import { adapter } from 'next/dist/server/web/adapter';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
   adapter: PrismaAdapter(PrismaDB),
   debug: false,
-  session: { strategy: 'jwt' },
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
+  },
+  cookies: {
+    sessionToken: {
+      options: {
+        httpOnly: true, // محدودیت دسترسی جاوااسکریپت
+        secure: process.env.NODE_ENV === 'production', // استفاده از HTTPS در حالت تولید
+        sameSite: 'strict', // جلوگیری از حملات CSRF
+        path: '/',
+      },
+    },
+  },
   logger: logger,
   pages: {
     signIn: '/login',
@@ -72,19 +87,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      console.log(222222);
-
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/dashboard', nextUrl));
-      }
-      return true;
-    },
     async jwt({ account, token, user, profile, session, trigger }) {
       console.log('account', account);
       console.log('token', token);
@@ -92,6 +94,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       console.log('profile', profile);
       console.log('session', session);
       console.log('trigger', trigger);
+      // const sessions = await PrismaAdapter(PrismaDB).createSession!({
+      //   userId: user.id!,
+      //   sessionToken,
+      //   expires,
+      // })
+      // token.sessionId = sessions.sessionToken
 
       return token;
     },
