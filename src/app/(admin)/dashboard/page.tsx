@@ -1,6 +1,9 @@
+// import { auth } from '@/lib/auth/next-auth';
 import React from 'react'
 
-function dashboardPage() {
+async function dashboardPage() {
+  // console.log('session is: ', await auth());
+  
   return (
     <div>dashboardPage</div>
   )
