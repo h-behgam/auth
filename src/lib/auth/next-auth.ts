@@ -16,7 +16,6 @@ import {
   UserDoesNotExistError,
 } from './custom-auth-error';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { adapter } from 'next/dist/server/web/adapter';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
@@ -33,13 +32,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         httpOnly: true, // محدودیت دسترسی جاوااسکریپت
         secure: process.env.NODE_ENV === 'production', // استفاده از HTTPS در حالت تولید
         sameSite: 'strict', // جلوگیری از حملات CSRF
-        path: '/',
+        // path: '/',
       },
     },
   },
   logger: logger,
   pages: {
-    signIn: '/login',
+    signIn: '/loginnnn',
   },
   ...authConfig,
   providers: [
@@ -103,9 +102,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token, user }) {
       console.log('session', session);
       console.log('token', token);
+      console.log('user', user);
       return session;
     },
   },
