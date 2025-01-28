@@ -10,7 +10,7 @@ function SigninTemplate() {
 
   const [state, action, pending] = useActionState(login, initialState);
 
-  // console.log('state', state.error?.message);
+  console.log('state', state);
   // console.log('pending', pending);
 
   return (
