@@ -2,14 +2,34 @@
 import { login } from '@/actions/auth';
 import ClientButton from '@/components/global/client-button';
 import CustomInput from '@/components/global/custom-input';
+import { revalidatePath } from 'next/cache';
+// import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
-import { useActionState } from 'react';
+// import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useActionState, useEffect } from 'react';
 
 function SigninTemplate() {
-  const initialState = { message: '', error: null };
+  const router = useRouter(); // ⬅️ خارج از شرط اجرا شود
+  const initialState = { message: 'Please fill in the form', error: null };
 
   const [state, action, pending] = useActionState(login, initialState);
+  // if (!pending && state.message === "Login successful") {
+  //   // useRouter().refresh();
+  //   useRouter().push('/dashboard');
+  //   // revalidatePath('/dashboard')
+  //   // redirect( '/dashboard');
+  // }
 
+
+  useEffect(() => {
+    if (!pending && state.message === 'Login successful') {
+      router.push('/dashboard');
+      router.refresh(); // ✅ اجرای بدون تغییر در ترتیب Hooks
+      // revalidatePath('/dashboard')
+      // redirect( '/dashboard');
+    }
+  }, [pending, state.message, router]);
   console.log('state', state);
   // console.log('pending', pending);
 
