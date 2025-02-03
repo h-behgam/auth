@@ -3,6 +3,7 @@
 import { isValidJsonString } from '@/lib/auth/auth-helper';
 import { signIn } from '@/lib/auth/next-auth';
 import { signOut } from 'next-auth/react';
+import { revalidatePath } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 export type FormState = {
@@ -30,7 +31,7 @@ export const login = async (
       password,
       redirect: false,
     });
-
+    revalidatePath('/dashboard');
     return { ...state, message: 'Login successful' };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -64,7 +65,7 @@ export const logout = async () => {
     await signOut({ redirectTo: '/login' });
   } catch (error) {
     console.log('error', error);
-    
+
     if (isRedirectError(error)) {
       console.log('error in logout auth is : ', error);
       throw error;
