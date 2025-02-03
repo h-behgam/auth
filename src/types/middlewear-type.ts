@@ -1,23 +1,19 @@
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
+import { Session } from "next-auth"; // ایمپورت تایپ صحیح از NextAuth
 
-// type User = Record<string, unknown>; // برای کاربران با فیلدهای نامشخص
-// type Token = Record<string, unknown>; // برای توکن با فیلدهای نامشخص
+// interface User {
+//   name?: string | null; // فیلد name می‌تواند null یا undefined باشد
+//   email?: string | null;
+//   image?: string | null;
+// }
 
-interface User {
-  id: string; // یا هر نوعی که برای ID کاربر استفاده می‌کنید
-  name: string;
-  email: string;
-  // هر فیلد دیگری که برای کاربر دارید
-}
+// interface Token {
+//   accessToken?: string;
+//   expiresAt?: Date;
+// }
 
-interface Token {
-  accessToken: string;
-  expiresAt: Date; // یا نوعی که برای زمان انقضا استفاده می‌کنید
-  // هر فیلد دیگری که برای توکن دارید
-}
+// تغییر تایپ AuthenticatedRequest برای انطباق با NextAuth
 export interface AuthenticatedRequest extends NextRequest {
-  auth?: {
-    user?: User; // تایپ کاربر (بسته به تنظیمات شما)
-    token?: Token; // تایپ توکن (بسته به تنظیمات شما)
-  } | null; // امکان null بودن را اضافه می‌کنیم
+  auth?: Session | null; // به جای تعریف دستی، از تایپ `Session` استفاده می‌کنیم
 }
+
