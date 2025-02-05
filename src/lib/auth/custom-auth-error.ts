@@ -27,22 +27,22 @@ export class CustomCredentialsSignin extends CredentialsSignin {
     super();
     this.name = 'Error';
     this.message = message;
-    this.code = 'AuthError';
+    this.code = message; // I use code instead of message it's because in client component we get just code and type
     this.stack = undefined;
   }
 }
 
 // throw new error if user does not exist
 export class UserDoesNotExistError extends CredentialsSignin {
-  code = 'AuthError';
-  message = 'User does not exist - Please check credentials';
+  // code = 'AuthError';
+  code = 'User does not exist - Please check credentials';
   stack = undefined;
 }
 
 // throw new error if password is incorrect
 export class PasswordInccorectError extends CredentialsSignin {
-  code = 'AuthError';
-  message = 'Password is incorrect - Please check credentials';
+  // code = 'AuthError';
+  code = 'Password is incorrect - Please check credentials';
   stack = undefined;
 }
 
