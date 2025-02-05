@@ -38,7 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   logger: logger,
   pages: {
-    signIn: '/loginnnn',
+    signIn: '/login',
   },
   ...authConfig,
   providers: [
@@ -87,12 +87,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async jwt({ account, token, user, profile, session, trigger }) {
-      // console.log('account', account);
-      // console.log('token', token);
-      // console.log('user', user);
-      // console.log('profile', profile);
-      // console.log('session', session);
-      // console.log('trigger', trigger);
+      console.log('account', account);
+      console.log('token', token);
+      console.log('user', user);
+      console.log('profile', profile);
+      console.log('session', session);
+      console.log('trigger', trigger);
       // const sessions = await PrismaAdapter(PrismaDB).createSession!({
       //   userId: user.id!,
       //   sessionToken,
@@ -103,9 +103,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ session, token, user }) {
-      // console.log('session', session);
-      // console.log('token', token);
-      // console.log('user', user);
+      console.log('session', session);
+      console.log('token', token);
+      console.log('user', user);
       return session;
     },
   },
