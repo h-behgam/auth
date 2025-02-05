@@ -1,7 +1,5 @@
 import authConfig from '@/lib/auth/auth.config';
 import NextAuth from 'next-auth';
-// import { AuthenticatedRequest } from './types/middlewear-type';
-// import { NextResponse } from 'next/server';
 
 // Use only one of the two middleware options below
 // 1. Use middleware directly
@@ -16,11 +14,6 @@ export const { auth: middleware } = NextAuth(authConfig);
 // export default auth(async (req: AuthenticatedRequest) => {
 //   // console.log('req', req.nextUrl.pathname);
 //   // console.log('auth', req.auth);
-
-//   const response = NextResponse.next();
-//     response.headers.set("x-user-authenticated", req.auth ? "true" : "false");
-
-//     return response;
 // });
 
 // Middleware configuration
