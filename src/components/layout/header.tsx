@@ -7,12 +7,12 @@ import { cn } from '@/lib/util';
 function HeaderLayout() {
   const { data: session, status } = useSession();
   return (
-    <nav className='flex justify-between p-2'>
+    <nav className='flex justify-between py-2'>
       <ul className='flex gap-4'>
         <li>
           <Link
             href='/'
-            className='block px-4 py-2 duration-300 hover:bg-slate-100'
+            className='block py-2 pr-4 duration-300 hover:bg-slate-100'
           >
             Home
           </Link>
