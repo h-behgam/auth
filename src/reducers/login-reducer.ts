@@ -1,32 +1,31 @@
-///////
+interface IZOD {
+  username?: string;
+  password?: string;
+}
 interface State {
-  zod?: {
-    username?: string;
-    password?: string;
-  } | null;
+  zod?: IZOD | null;
   other?: string | null;
 }
 
-const initialState: State = {
+export const LoginForimInitialState: State = {
   zod: null,
   other: null,
 };
 
 type Action =
-  | { type: 'SET_ZOD'; payload: boolean }
-  | { type: 'SET_OTHER'; payload: boolean }
+  | { type: 'SET_ZOD'; payload: IZOD }
+  | { type: 'SET_OTHER'; payload: string }
   | { type: 'RESET' };
 
-const reducer = (state: State, action: Action): State => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'SET_ZOD':
       return { ...state, zod: action.payload };
     case 'SET_OTHER':
-      return { ...state, showFullImage: action.payload };
+      return { ...state, other: action.payload };
     case 'RESET':
-      return initialState;
+      return { ...LoginForimInitialState };
     default:
       return state;
   }
 };
-///////
