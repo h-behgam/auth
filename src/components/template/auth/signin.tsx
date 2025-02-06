@@ -2,14 +2,14 @@
 import ClientButton from '@/components/global/client-button';
 import CustomInput from '@/components/global/custom-input';
 import { isValidJsonString } from '@/lib/auth/auth-helper';
-import { LoginForimInitialState, reducer } from '@/reducers/login-reducer';
+import { LoginFormInitialState, loginReducer } from '@/reducers/login-reducer';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useReducer, useState } from 'react';
 
 function SigninTemplate() {
-  const [state, dispatch] = useReducer(reducer, LoginForimInitialState);
+  const [state, dispatch] = useReducer(loginReducer, LoginFormInitialState);
   const [formValues, setFormValues] = useState<{
     username: string;
   }>({
