@@ -7,7 +7,7 @@ interface State {
   other?: string | null;
 }
 
-export const LoginForimInitialState: State = {
+export const LoginFormInitialState: State = {
   zod: null,
   other: null,
 };
@@ -17,14 +17,14 @@ type Action =
   | { type: 'SET_OTHER'; payload: string }
   | { type: 'RESET' };
 
-export const reducer = (state: State, action: Action): State => {
+export const loginReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'SET_ZOD':
       return { ...state, zod: action.payload };
     case 'SET_OTHER':
       return { ...state, other: action.payload };
     case 'RESET':
-      return { ...LoginForimInitialState };
+      return { ...LoginFormInitialState };
     default:
       return state;
   }
