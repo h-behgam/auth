@@ -2,27 +2,69 @@
 
 import { isValidJsonString } from '@/lib/auth/auth-helper';
 import { signIn } from '@/lib/auth/next-auth';
+import { signupSchema } from '@/lib/auth/zod';
+import PrismaDB from '@/lib/PrismaDB';
+import {
+  type IinputSignup,
+  type LoginFormState,
+  type Isignup,
+} from '@/types/auth-types';
+import { hash } from 'bcrypt';
 import { signOut } from 'next-auth/react';
-import { revalidatePath } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
-export type FormState = {
-  error?: {
-    message:
-      | {
-          username?: string;
-          password?: string;
-        }
-      | string
-      | null;
-  } | null;
-  message?: string | undefined;
+export const signup = async (formData: FormData): Promise<Isignup> => {
+  try {
+    const { username, password, confirmPassword, name, email } =
+      Object.fromEntries(formData) as IinputSignup;
+
+    /**
+     * Check form validation
+     * if form not validate return error
+     */
+    const validateForm = signupSchema.safeParse({
+      name,
+      username,
+      email,
+      password,
+      confirmPassword,
+    });
+    if (!validateForm.success)
+      return {
+        success: false,
+        error: {zod: Object.fromEntries(
+          Object.entries(validateForm.error.flatten().fieldErrors))},
+      };
+
+    /**
+     * Check user exist
+     */
+    const userExist = await PrismaDB.user.findFirst({
+      where: {
+        username,
+      },
+    });
+    if (userExist) return { success: false, error: {other: 'User exist'} };
+
+    /**
+     * Create user
+     */
+    const hashedPassword = await hash(password, 10);
+    const user = PrismaDB.user.create({
+      data: { username, password: hashedPassword, name, email },
+    });
+    if (!user) return { success: false, error: {other: 'We wenr to error!!'} };
+
+    return { success: true, data: (await user).username };
+  } catch (error) {
+    console.log('errir in server: ', { error });
+  }
 };
 
 export const login = async (
-  state: FormState,
+  state: LoginFormState,
   formData: FormData,
-): Promise<FormState> => {
+): Promise<LoginFormState> => {
   try {
     const { username, password } = Object.fromEntries(formData);
 
@@ -31,7 +73,6 @@ export const login = async (
       password,
       redirect: false,
     });
-    revalidatePath('/dashboard');
     return { ...state, message: 'Login successful' };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
