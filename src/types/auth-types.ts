@@ -5,7 +5,7 @@ export type IinputSignup = Record<
 
 export interface Isignup {
   success: boolean;
-  error: {
+  error?: {
     zod?: Record<string, string|string[]>;
     other?: string;
   };
