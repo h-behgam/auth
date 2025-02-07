@@ -6,6 +6,7 @@ import { SignupFormInitialState, signupReducer } from '@/reducers/signup-reducer
 import { IinputSignup, type IsignupFileds } from '@/types/auth-types';
 import Link from 'next/link';
 import { useReducer, useState } from 'react';
+import ErrorFiled from './error-field';
 
 function SignupTemplate() {
   const [state, dispatch] = useReducer(signupReducer, SignupFormInitialState)
@@ -49,7 +50,7 @@ function SignupTemplate() {
             autoComplete='autoComplete'
             defaultValue={formValues.name}
           />
-          {state && <p className='text-red-700'>{state.zod?.name}</p>}
+          {state.zod && <ErrorFiled  item={state.zod?.name as string[]} />}
         </div>
         <div className='mb-2 p-1'>
           <CustomInput
@@ -61,7 +62,7 @@ function SignupTemplate() {
             autoComplete='autoComplete'
             defaultValue={formValues.username}
           />
-          {state && <p className='text-red-700'>{state.zod?.username}</p>}
+          {state.zod && <ErrorFiled  item={state.zod?.username as string[]} />}
         </div>
         <div className='mb-2 p-1'>
           <CustomInput
@@ -73,7 +74,7 @@ function SignupTemplate() {
             autoComplete='autoComplete'
             defaultValue={formValues.email}
           />
-          {state && <p className='text-red-700'>{state.zod?.email}</p>}
+          {state.zod && <ErrorFiled  item={state.zod?.email as string[]} />}
         </div>
         <div className='mb-2 p-1'>
           <CustomInput
@@ -83,7 +84,7 @@ function SignupTemplate() {
             labalName='password'
             labelTitle='Password'
           />
-          {state && <p className='text-red-700'>{state.zod?.password}</p>}
+          {state.zod && <ErrorFiled  item={state.zod?.password as string[]} />}
         </div>
         <div className='mb-2 p-1'>
           <CustomInput
@@ -93,7 +94,7 @@ function SignupTemplate() {
             labalName='confirmPassword'
             labelTitle='Confirm Password'
           />
-          {state && <p className='text-red-700'>{state.zod?.confirmPassword}</p>}
+          {state.zod && <ErrorFiled  item={state.zod?.confirmPassword as string[]} />}
         </div>
         {state && <p className='text-red-700'>{state.other}</p>}
         <div>
