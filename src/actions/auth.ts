@@ -1,14 +1,16 @@
 'use server';
 
 import { isValidJsonString } from '@/lib/auth/auth-helper';
-import { signIn } from '@/lib/auth/next-auth';
 import { signupSchema } from '@/lib/auth/zod';
+import { signIn } from '@/lib/auth/next-auth';
 import PrismaDB from '@/lib/PrismaDB';
+
 import {
   type IinputSignup,
   type LoginFormState,
   type Isignup,
 } from '@/types/auth-types';
+
 import { hash } from 'bcrypt';
 import { signOut } from 'next-auth/react';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
@@ -32,8 +34,11 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
     if (!validateForm.success)
       return {
         success: false,
-        error: {zod: Object.fromEntries(
-          Object.entries(validateForm.error.flatten().fieldErrors))},
+        error: {
+          zod: Object.fromEntries(
+            Object.entries(validateForm.error.flatten().fieldErrors),
+          ),
+        },
       };
 
     /**
@@ -44,7 +49,7 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
         username,
       },
     });
-    if (userExist) return { success: false, error: {other: 'User exist'} };
+    if (userExist) return { success: false, error: { other: 'User exist' } };
 
     /**
      * Create user
@@ -53,11 +58,13 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
     const user = PrismaDB.user.create({
       data: { username, password: hashedPassword, name, email },
     });
-    if (!user) return { success: false, error: {other: 'We wenr to error!!'} };
+    if (!user)
+      return { success: false, error: { other: 'We wenr to error!!' } };
 
     return { success: true, data: (await user).username };
   } catch (error) {
     console.log('errir in server: ', { error });
+    return { success: false, error: { other: error as {} } };
   }
 };
 
