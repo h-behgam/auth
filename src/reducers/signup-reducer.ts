@@ -1,9 +1,9 @@
 interface IZOD {
-  name?: string;
-  username?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
+  name?: string | string[];
+  username?: string | string[];
+  email?: string | string[];
+  password?: string | string[];
+  confirmPassword?: string | string[];
 }
 interface State {
   zod?: IZOD | null;
