@@ -6,8 +6,8 @@ export type IinputSignup = Record<
 export interface Isignup {
   success: boolean;
   error?: {
-    zod?: Record<string, string|string[]>;
-    other?: string;
+    zod?: Record<string, string | string[]>;
+    other?: string | {};
   };
   data?: {};
 }
