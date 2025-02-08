@@ -1,15 +1,18 @@
-'use client'
+'use client';
 import { signup } from '@/actions/auth';
 import ClientButton from '@/components/global/client-button';
 import CustomInput from '@/components/global/custom-input';
-import { SignupFormInitialState, signupReducer } from '@/reducers/signup-reducer';
+import {
+  SignupFormInitialState,
+  signupReducer,
+} from '@/reducers/signup-reducer';
 import { IinputSignup, type IsignupFileds } from '@/types/auth-types';
 import Link from 'next/link';
 import { useReducer, useState } from 'react';
 import ErrorFiled from './error-field';
 
 function SignupTemplate() {
-  const [state, dispatch] = useReducer(signupReducer, SignupFormInitialState)
+  const [state, dispatch] = useReducer(signupReducer, SignupFormInitialState);
   // initial useState
   const [formValues, setFormValues] = useState<IsignupFileds>({
     name: '',
@@ -25,13 +28,23 @@ function SignupTemplate() {
 
     const response = await signup(formData);
     if (!response.success) {
-      setFormValues({name,username,email})
-      
-      if (response.error.zod) {
-        dispatch({type: 'SET_ZOD', payload: response.error.zod})
+      setFormValues({ name, username, email });
+
+      if (response.error?.zod) {
+        dispatch({ type: 'SET_ZOD', payload: response.error.zod });
+      } else if (response.error?.other) {
+        dispatch({
+          type: 'SET_OTHER',
+          payload: response.error.other as string,
+        });
       }
     }
-    // console.log('response', state);
+    setFormValues({
+      name: '',
+      username: '',
+      email: '',
+    });
+    dispatch({ type: 'RESET' });
   };
   return (
     <div className='mx-auto w-full max-w-md'>
@@ -50,7 +63,7 @@ function SignupTemplate() {
             autoComplete='autoComplete'
             defaultValue={formValues.name}
           />
-          {state.zod && <ErrorFiled  item={state.zod?.name as string[]} />}
+          {state.zod?.name && <ErrorFiled item={state.zod?.name as string[]} />}
         </div>
         <div className='mb-2 p-1'>
           <CustomInput
@@ -62,7 +75,9 @@ function SignupTemplate() {
             autoComplete='autoComplete'
             defaultValue={formValues.username}
           />
-          {state.zod && <ErrorFiled  item={state.zod?.username as string[]} />}
+          {state.zod?.username && (
+            <ErrorFiled item={state.zod?.username as string[]} />
+          )}
         </div>
         <div className='mb-2 p-1'>
           <CustomInput
@@ -74,7 +89,9 @@ function SignupTemplate() {
             autoComplete='autoComplete'
             defaultValue={formValues.email}
           />
-          {state.zod && <ErrorFiled  item={state.zod?.email as string[]} />}
+          {state.zod?.email && (
+            <ErrorFiled item={state.zod?.email as string[]} />
+          )}
         </div>
         <div className='mb-2 p-1'>
           <CustomInput
@@ -84,7 +101,9 @@ function SignupTemplate() {
             labalName='password'
             labelTitle='Password'
           />
-          {state.zod && <ErrorFiled  item={state.zod?.password as string[]} />}
+          {state.zod?.password && (
+            <ErrorFiled item={state.zod?.password as string[]} />
+          )}
         </div>
         <div className='mb-2 p-1'>
           <CustomInput
@@ -94,9 +113,16 @@ function SignupTemplate() {
             labalName='confirmPassword'
             labelTitle='Confirm Password'
           />
-          {state.zod && <ErrorFiled  item={state.zod?.confirmPassword as string[]} />}
+          {state.zod?.confirmPassword && (
+            <ErrorFiled item={state.zod?.confirmPassword as string[]} />
+          )}
         </div>
-        {state && <p className='text-red-700'>{state.other}</p>}
+        {state.zod?.confirm && (
+          <ErrorFiled item={state.zod?.confirm as string[]} />
+        )}
+        {state.other?.message && (
+          <p className='text-red-700'>{state.other.message}</p>
+        )}
         <div>
           <ClientButton disabled={false}>Sign up</ClientButton>
         </div>
