@@ -102,7 +102,7 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
     return { success: true, data: { username: user.username } };
   } catch (error) {
     // Handle any unexpected errors and return a generic server error message
-    return { success: false, error: { other: { server: error as {} } } };
+    return { success: false, error: { other: { server: error as object } } };
   }
 };
 
