@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useReducer, useState } from 'react';
 // import ErrorFiled from './error-field';
-const ErrorFiled = dynamic(() => import('./error-field') )
+const ErrorFiled = dynamic(() => import('./error-field'));
 
 function SignupTemplate() {
   const [state, dispatch] = useReducer(signupReducer, SignupFormInitialState);
@@ -37,7 +37,7 @@ function SignupTemplate() {
       } else if (response.error?.other) {
         dispatch({
           type: 'SET_OTHER',
-          payload: response.error.other as string,
+          payload: response.error.other,
         });
       }
       return;
