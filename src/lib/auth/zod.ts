@@ -9,7 +9,7 @@ export const signupSchema = object({
   name: string({ required_error: 'Name is requierd' })
     .min(4)
     .max(40)
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter'),
+    .regex(/[A-Z]/, 'Name must contain at least one uppercase letter'),
   email: string({ required_error: 'Email is requierd' }).email({
     message: 'Enter email correctly.',
   }),
