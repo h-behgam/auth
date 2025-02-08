@@ -7,7 +7,10 @@ export interface Isignup {
   success: boolean;
   error?: {
     zod?: Record<string, string | string[]>;
-    other?: string | {};
+    other?: {
+      message?: string;
+      server?: {};
+    };
   };
   data?: {};
 }
