@@ -9,10 +9,10 @@ export interface Isignup {
     zod?: Record<string, string | string[]>;
     other?: {
       message?: string;
-      server?: {};
+      server?: object;
     };
   };
-  data?: {};
+  data?: object;
 }
 
 export interface IsignupFileds {
