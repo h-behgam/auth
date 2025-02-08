@@ -99,7 +99,7 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
       };
 
     // Return success with the username of the newly created user
-    return { success: true, data: user.username };
+    return { success: true, data: { username: user.username } };
   } catch (error) {
     // Handle any unexpected errors and return a generic server error message
     return { success: false, error: { other: { server: error as {} } } };
