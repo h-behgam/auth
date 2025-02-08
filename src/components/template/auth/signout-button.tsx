@@ -14,6 +14,8 @@ export default function SignoutButton({
   className,
 }: InfoButtonProps) {
   const clickHandler = async () => {
+    const isConfirm = confirm('Are you sure');
+    if (!isConfirm) return;
     try {
       await signOut({ redirectTo: '/login' });
     } catch (error) {
