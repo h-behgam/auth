@@ -16,14 +16,26 @@ import { hash } from 'bcrypt';
 import { signOut } from 'next-auth/react';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
+/**
+ * Handles the user signup process.
+ *
+ * This function takes form data, validates it, checks if the user or email already exists,
+ * and then creates a new user if all validations pass.
+ *
+ * @param {FormData} formData - The form data containing user information (username, password, confirmPassword, name, email).
+ * @returns {Promise<Isignup>} - A promise that resolves to an object indicating the success or failure of the signup process.
+ *                              On success, it returns the username of the newly created user.
+ *                              On failure, it returns an error object with details about what went wrong.
+ */
 export const signup = async (formData: FormData): Promise<Isignup> => {
   try {
+    // Extract form data fields
     const { username, password, confirmPassword, name, email } =
       Object.fromEntries(formData) as IinputSignup;
 
     /**
-     * Check form validation
-     * if form not validate return error
+     * Validate the form data using a schema.
+     * If validation fails, return an error object with validation details.
      */
     const validateForm = signupSchema.safeParse({
       name,
@@ -43,7 +55,8 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
       };
 
     /**
-     * Check user exist
+     * Check if a user with the provided username already exists.
+     * If the user exists, return an error indicating that the username is already taken.
      */
     const userExist = await PrismaDB.user.findFirst({
       where: {
@@ -51,9 +64,14 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
       },
     });
     if (userExist)
-      return { success: false, error: { other: { message: 'User exist' } } };
+      return {
+        success: false,
+        error: { other: { message: 'User already exists' } },
+      };
+
     /**
-     * Check email exist
+     * Check if a user with the provided email already exists.
+     * If the email exists, return an error indicating that the email is already in use.
      */
     const emailExist = await PrismaDB.user.findFirst({
       where: {
@@ -61,10 +79,14 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
       },
     });
     if (emailExist)
-      return { success: false, error: { zod: { email: 'email exist' } } };
+      return {
+        success: false,
+        error: { zod: { email: 'Email already in use' } },
+      };
 
     /**
-     * Create user
+     * Hash the user's password and create a new user record in the database.
+     * If the user creation fails, return an error indicating a server error.
      */
     const hashedPassword = await hash(password, 10);
     const user = await PrismaDB.user.create({
@@ -73,16 +95,23 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
     if (!user)
       return {
         success: false,
-        error: { other: { message: 'Error in server !!' } },
+        error: { other: { message: 'Server error: Unable to create user' } },
       };
 
+    // Return success with the username of the newly created user
     return { success: true, data: user.username };
   } catch (error) {
-    // console.log('errir in server: ',  error );
+    // Handle any unexpected errors and return a generic server error message
     return { success: false, error: { other: { server: error as {} } } };
   }
 };
 
+/**
+ * I dont use it becouse redirect function of signIn not work in server action when you use client component
+ * @param state
+ * @param formData
+ * @returns {Promise<LoginFormState>}
+ */
 export const login = async (
   state: LoginFormState,
   formData: FormData,
@@ -123,6 +152,9 @@ export const login = async (
   }
 };
 
+/**
+ * I dont use it becouse redirect function of signOut not work in server action when you use client component
+ */
 export const logout = async () => {
   try {
     await signOut({ redirectTo: '/login' });
