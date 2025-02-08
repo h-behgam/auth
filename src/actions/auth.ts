@@ -54,24 +54,22 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
       return { success: false, error: { other: { message: 'User exist' } } };
     /**
      * Check email exist
-    */
-   const emailExist = await PrismaDB.user.findFirst({
-     where: {
-       email,
+     */
+    const emailExist = await PrismaDB.user.findFirst({
+      where: {
+        email,
       },
     });
     if (emailExist)
       return { success: false, error: { zod: { email: 'email exist' } } };
 
-    
     /**
      * Create user
-    */
-   const hashedPassword = await hash(password, 10);
-   const user = await PrismaDB.user.create({
-     data: { username, password: hashedPassword, name, email },
+     */
+    const hashedPassword = await hash(password, 10);
+    const user = await PrismaDB.user.create({
+      data: { username, password: hashedPassword, name, email },
     });
-    console.log('user is: ', user);
     if (!user)
       return {
         success: false,
