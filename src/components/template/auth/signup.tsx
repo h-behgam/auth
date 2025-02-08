@@ -38,6 +38,7 @@ function SignupTemplate() {
           payload: response.error.other as string,
         });
       }
+      return;
     }
     setFormValues({
       name: '',
