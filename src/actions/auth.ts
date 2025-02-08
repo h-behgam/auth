@@ -12,6 +12,7 @@ import {
 } from '@/types/auth-types';
 
 import { hash } from 'bcrypt';
+
 import { signOut } from 'next-auth/react';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
@@ -49,22 +50,38 @@ export const signup = async (formData: FormData): Promise<Isignup> => {
         username,
       },
     });
-    if (userExist) return { success: false, error: { other: 'User exist' } };
+    if (userExist)
+      return { success: false, error: { other: { message: 'User exist' } } };
+    /**
+     * Check email exist
+    */
+   const emailExist = await PrismaDB.user.findFirst({
+     where: {
+       email,
+      },
+    });
+    if (emailExist)
+      return { success: false, error: { zod: { email: 'email exist' } } };
 
+    
     /**
      * Create user
-     */
-    const hashedPassword = await hash(password, 10);
-    const user = PrismaDB.user.create({
-      data: { username, password: hashedPassword, name, email },
+    */
+   const hashedPassword = await hash(password, 10);
+   const user = await PrismaDB.user.create({
+     data: { username, password: hashedPassword, name, email },
     });
+    console.log('user is: ', user);
     if (!user)
-      return { success: false, error: { other: 'We wenr to error!!' } };
+      return {
+        success: false,
+        error: { other: { message: 'Error in server !!' } },
+      };
 
-    return { success: true, data: (await user).username };
+    return { success: true, data: user.username };
   } catch (error) {
-    console.log('errir in server: ', { error });
-    return { success: false, error: { other: error as {} } };
+    // console.log('errir in server: ',  error );
+    return { success: false, error: { other: { server: error as {} } } };
   }
 };
 
