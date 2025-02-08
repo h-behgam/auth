@@ -7,9 +7,11 @@ import {
   signupReducer,
 } from '@/reducers/signup-reducer';
 import { IinputSignup, type IsignupFileds } from '@/types/auth-types';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useReducer, useState } from 'react';
-import ErrorFiled from './error-field';
+// import ErrorFiled from './error-field';
+const ErrorFiled = dynamic(() => import('./error-field') )
 
 function SignupTemplate() {
   const [state, dispatch] = useReducer(signupReducer, SignupFormInitialState);
@@ -19,7 +21,7 @@ function SignupTemplate() {
     username: '',
     email: '',
   });
-  console.log('response', state);
+  // console.log('response', state);
 
   const formHandler = async (formData: FormData) => {
     const { username, name, email } = Object.fromEntries(
