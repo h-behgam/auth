@@ -9,7 +9,7 @@ interface IZOD {
 
 interface Iother {
   message?: string;
-  server?: {};
+  server?: object;
 }
 interface State {
   zod?: IZOD | null;
@@ -23,7 +23,7 @@ export const SignupFormInitialState: State = {
 
 type Action =
   | { type: 'SET_ZOD'; payload: IZOD }
-  | { type: 'SET_OTHER'; payload: string }
+  | { type: 'SET_OTHER'; payload: Iother }
   | { type: 'RESET' };
 
 export const signupReducer = (state: State, action: Action): State => {
