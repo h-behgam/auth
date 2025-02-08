@@ -4,10 +4,16 @@ interface IZOD {
   email?: string | string[];
   password?: string | string[];
   confirmPassword?: string | string[];
+  confirm?: string | string[];
+}
+
+interface Iother {
+  message?: string;
+  server?: {};
 }
 interface State {
   zod?: IZOD | null;
-  other?: string | null;
+  other?: Iother | null;
 }
 
 export const SignupFormInitialState: State = {
